@@ -1,0 +1,125 @@
+---
+swagger: "2.0"
+info:
+  description: "A simple Google Material Colors API"
+  version: "1.0.0"
+  title: "Simple Color API"
+  contact:
+    email: "shavaun@victoriousninja.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/noeticity/Colors/1.0.0"
+tags:
+- name: "admins"
+  description: "Secured Admin-only calls"
+- name: "developers"
+  description: "Operations available to regular developers"
+schemes:
+- "https"
+paths:
+  /colors:
+    get:
+      tags:
+      - "developers"
+      summary: "Returns colors that match your requirements."
+      description: "Returns colors that match your requirements. Includes only the\
+        \ colors in Google's Material UI design specifications.\n"
+      operationId: "searchInventory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "The name of a Material color that you want to match."
+        required: false
+        type: "string"
+      - name: "rgb"
+        in: "query"
+        description: "The RGB values of a Material color that you want to match."
+        required: false
+        type: "string"
+      - name: "hue-name"
+        in: "query"
+        description: "The general hue name that you want to match."
+        required: false
+        type: "string"
+      - name: "relationship"
+        in: "query"
+        description: "The relationship between returned values and input color."
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of matching colors to return."
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "Colors that match your criteria."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Color"
+        400:
+          description: "Invalid parameters."
+      x-swagger-router-controller: "Developers"
+    post:
+      tags:
+      - "admins"
+      summary: "Adds a color."
+      description: "Adds a color to the system."
+      operationId: "addColor"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Color"
+        description: "Color to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Color"
+      responses:
+        201:
+          description: "Color added."
+        400:
+          description: "Invalid parameters."
+        409:
+          description: "That color already exists."
+      x-swagger-router-controller: "Admins"
+definitions:
+  Color:
+    type: "object"
+    required:
+    - "blue-value"
+    - "green-value"
+    - "hex"
+    - "id"
+    - "name"
+    - "red-value"
+    properties:
+      id:
+        type: "string"
+        format: "int32"
+        example: "5"
+      name:
+        type: "string"
+        example: "Seashell"
+      red-value:
+        type: "string"
+        example: "255"
+      green-value:
+        type: "string"
+        example: "235"
+      blue-value:
+        type: "string"
+        example: "238"
+      hex:
+        type: "string"
+        example: "#ffebee"
